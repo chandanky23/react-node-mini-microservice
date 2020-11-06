@@ -1,0 +1,9 @@
+apiVersion: v1 # This command tells kubernetes to look at default v1 kubernetes list of objects that we can create.
+kind: Pod # Exact type of object we want to create from the above list
+metadata: # Options to the object
+  name: posts # Name of the POD
+spec: # List of config options which we can assign to a object , i.e, POD here
+  containers:
+    - name: posts # make a container in the POD with this name
+      image: chandanky23/posts:0.0.1 # Image to use in the above container. If version is not provided then it will take latest
+  
