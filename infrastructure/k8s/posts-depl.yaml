@@ -1,0 +1,17 @@
+apiVersion: apps/v1 # apps is a bucket with different objects (v1 for example)
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1 # no. of pods we want to create running some images
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec: #configurations for the pods
+      containers:
+        - name: posts
+          image: chandanky23/posts
