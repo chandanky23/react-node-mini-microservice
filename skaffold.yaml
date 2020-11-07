@@ -1,0 +1,65 @@
+# this tool runs outside of our kubernetes cluster
+
+# this does three things:
+# 1. when we start of skaffold apply the files inside the directory pointed by manifest.
+# 2. when we make a change apply the files inside the directory pointed by manifest.
+# 3. when we stop skaffold, find all those objects associated with the files inside the directory pointed by manifest and delete them (don't delete the files)
+
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infrastructure/k8s/deployments/*
+build:
+  local:
+    push: false # don't push to docker hub
+  artifacts:
+    - image: chandanky23/app
+      context: app
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest: .
+    - image: chandanky23/posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: chandanky23/comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: chandanky23/query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: chandanky23/event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: chandanky23/moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
