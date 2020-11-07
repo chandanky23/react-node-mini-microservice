@@ -1,0 +1,31 @@
+apiVersion: apps/v1 # apps is a bucket with different objects (v1 for example)
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  replicas: 1 # no. of pods we want to create running some images
+  selector:
+    matchLabels:
+      app: query
+  template:
+    metadata:
+      labels:
+        app: query
+    spec: #configurations for the pods
+      containers:
+        - name: query
+          image: chandanky23/query
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  type: ClusterIP # this is default and can be ignored also
+  selector: # We are telling the service to find all the pos with the labels given to it to the outside traffic.
+    app: query
+  ports: # All the ports exposed to the outside world
+    - name: query
+      protocol: TCP
+      port: 4002 # port exposed by the node port which then pushes the traffic forward to the target port
+      targetPort: 4002 # actual port which out query service is exposing.

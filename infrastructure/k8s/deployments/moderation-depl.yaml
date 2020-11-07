@@ -1,0 +1,31 @@
+apiVersion: apps/v1 # apps is a bucket with different objects (v1 for example)
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec:
+  replicas: 1 # no. of pods we want to create running some images
+  selector:
+    matchLabels:
+      app: moderation
+  template:
+    metadata:
+      labels:
+        app: moderation
+    spec: #configurations for the pods
+      containers:
+        - name: moderation
+          image: chandanky23/moderation
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  type: ClusterIP # this is default and can be ignored also
+  selector: # We are telling the service to find all the pos with the labels given to it to the outside traffic.
+    app: moderation
+  ports: # All the ports exposed to the outside world
+    - name: moderation
+      protocol: TCP
+      port: 4003 # port exposed by the node port which then pushes the traffic forward to the target port
+      targetPort: 4003 # actual port which out moderation service is exposing.
